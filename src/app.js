@@ -88,7 +88,7 @@ function createMessageBubble(content, sender = "user") {
   );
 
   // 개별 프로필 아이콘 디자인
-  if (sender === "user") {
+  if (sender === "assistant") {
     avatar.classList.add("bg-gradient-to-br", "from-indigo-300", "to-blue-600");
     avatar.textContent = "A";
   } else {
