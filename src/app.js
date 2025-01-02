@@ -3,7 +3,6 @@ import "regenerator-runtime/runtime"; // if needed for async/await in older brow
 const chatContainer = document.getElementById("chat-container");
 const messageForm = document.getElementById("message-form");
 const userInput = document.getElementById("user-input");
-const apiSelector = document.getElementById("api-selector");
 const newChatBtn = document.getElementById("new-chat-btn");
 
 const BASE_URL = process.env.API_ENDPOINT;
@@ -52,26 +51,6 @@ async function getAllMessages() {
   });
 }
 
-async function saveMetadata(key, value) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction("metadata", "readwrite");
-    const store = tx.objectStore("metadata");
-    store.put({ key, value });
-    tx.oncomplete = () => resolve();
-    tx.onerror = (e) => reject(e);
-  });
-}
-
-async function getMetadata(key) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction("metadata", "readonly");
-    const store = tx.objectStore("metadata");
-    const req = store.get(key);
-    req.onsuccess = () => resolve(req.result ? req.result.value : null);
-    req.onerror = (e) => reject(e);
-  });
-}
-
 async function clearAllData() {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(["chats", "metadata"], "readwrite");
@@ -99,12 +78,12 @@ function createMessageBubble(content, sender = "user") {
     "text-white"
   );
 
-  if (sender === "assistant") {
-    avatar.classList.add("bg-gradient-to-br", "from-green-400", "to-green-600");
-    avatar.textContent = "A";
-  } else {
+  if (sender === "user") {
     avatar.classList.add("bg-gradient-to-br", "from-blue-500", "to-blue-700");
     avatar.textContent = "U";
+  } else {
+    avatar.classList.add("bg-gray-200", "text-gray-900");
+    avatar.textContent = "A";
   }
 
   const bubble = document.createElement("div");
@@ -118,10 +97,10 @@ function createMessageBubble(content, sender = "user") {
     "shadow-sm"
   );
 
-  if (sender === "assistant") {
-    bubble.classList.add("bg-gray-200", "text-gray-900");
-  } else {
+  if (sender === "user") {
     bubble.classList.add("bg-blue-600", "text-white");
+  } else {
+    bubble.classList.add("bg-gray-200", "text-gray-900");
   }
 
   bubble.textContent = content;
@@ -135,59 +114,22 @@ function scrollToBottom() {
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-async function getAssistantResponse(userMessage) {
-  const mode = apiSelector.value;
-  let url;
-  let payload;
-  console.log(mode)
-  console.log(payload)
+async function getChatResponse(userMessage) {
+  const payload = { message: userMessage }; // 요청 데이터는 단순 문자열로 구성
 
-  if (mode === "assistant") {
-    const thread_id = await getMetadata("thread_id");
-    payload = { message: userMessage };
-    if (thread_id) {
-      payload.thread_id = thread_id;
-    }
-    url = `${BASE_URL}/assistant`;
-  } else {
-    // Naive mode
-    const allMsgs = await getAllMessages();
-    const messagesForAPI = [
-      { role: "system", content: "You are a helpful assistant." },
-      ...allMsgs.map((m) => ({ role: m.role, content: m.content })),
-      { role: "user", content: userMessage },
-    ];
-    payload = { messages: messagesForAPI };
-    console.log('chat1')
-    url = `${BASE_URL}/chat`;
-
-  }
-
-  console.log(payload)
-  
-  const response = await fetch(url, {
-  
+  const response = await fetch(`${BASE_URL}/chat`, {
     method: "POST",
-    
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload), // JSON 형식으로 전송
   });
-  console.log(2)
+
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
   const data = await response.json();
-
-  if (mode === "assistant" && data.thread_id) {
-    const existingThreadId = await getMetadata("thread_id");
-    if (!existingThreadId) {
-      await saveMetadata("thread_id", data.thread_id);
-    }
-  }
-
   return data.reply;
 }
 
@@ -203,12 +145,12 @@ messageForm.addEventListener("submit", async (e) => {
   scrollToBottom();
 
   try {
-    const response = await getAssistantResponse(message);
+    const response = await getChatResponse(message);
     chatContainer.appendChild(createMessageBubble(response, "assistant"));
     await saveMessage("assistant", response);
     scrollToBottom();
   } catch (error) {
-    console.error("Error fetching assistant response:", error);
+    console.error("Error fetching response:", error);
     const errMsg = "Error fetching response. Check console.";
     chatContainer.appendChild(createMessageBubble(errMsg, "assistant"));
     await saveMessage("assistant", errMsg);
@@ -232,5 +174,3 @@ newChatBtn.addEventListener("click", async () => {
 });
 
 initDB().then(loadExistingMessages);
-
-console.log(BASE_URL);
