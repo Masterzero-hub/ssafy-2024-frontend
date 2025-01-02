@@ -156,17 +156,23 @@ async function getAssistantResponse(userMessage) {
       { role: "user", content: userMessage },
     ];
     payload = { messages: messagesForAPI };
+    console.log('chat1')
     url = `${BASE_URL}/chat`;
+
   }
 
+  console.log(payload)
+  
   const response = await fetch(url, {
+  
     method: "POST",
+    
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
   });
-
+  console.log(2)
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
