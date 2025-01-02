@@ -23,7 +23,7 @@ async function initDB() {
     };
     request.onsuccess = function (e) {
       db = e.target.result;
-      resolve();
+      resolve();a
     };
     request.onerror = function (e) {
       reject(e);
