@@ -111,9 +111,9 @@ function createMessageBubble(content, sender = "user") {
 
   // 개별 말풍선 디자인
   if (sender === "user") {
-    bubble.classList.add("bg-customSky100", "text-gray-600");
-  } else {
     bubble.classList.add("bg-gradient-to-br","from-customSky500","to-customSky700","text-white");
+  } else {
+    bubble.classList.add("bg-customSky100", "text-gray-600");
   }
 
   bubble.textContent = content;
