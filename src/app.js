@@ -139,6 +139,8 @@ async function getAssistantResponse(userMessage) {
   const mode = apiSelector.value;
   let url;
   let payload;
+  console.log(mode)
+  console.log(payload)
 
   if (mode === "assistant") {
     const thread_id = await getMetadata("thread_id");
