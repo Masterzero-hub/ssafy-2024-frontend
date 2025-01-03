@@ -34,9 +34,9 @@
 
 ---
 
-## 4. 사용 툴
-## 아키텍처
-![아키텍처](images/Frame%201.png)
+## 4. 사용 툴  
+## 아키텍처  
+![아키텍처](images/Frame%201.png)  
 ### 프론트엔드: Node.js  
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)  
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
@@ -65,7 +65,7 @@
 
 ---
 
-## 기능
+## 5. 기능
 
 - 사용자가 노트북에 대한 사용 방법을 묻는 경우, 질문 내용에서 노트북 제조사를 식별하는 기능을 추가했습니다.  
 - 식별된 노트북 제조사를 기반으로, 사전 학습된 사용 설명서를 참조하여 정확한 답변을 제공합니다.
@@ -93,29 +93,27 @@
 
 ---
 
-## 사용법
+## 6. 사용법
 
-
-### [사용 화면]
+### [사용 화면]  
   ![사용방법](images/NoteBot%20사용방법.jpg)
 
-
-[시연 연상]
+### [시연 연상]
 
 https://github.com/user-attachments/assets/9894beb4-9683-4cbd-8fc7-58743e17ae25
 
 ---
 
-## 배포된 링크
+## 7. 배포된 링크
 
 - **프론트**: [https://main.d23vfmqy5vhe9g.amplifyapp.com/](https://main.d23vfmqy5vhe9g.amplifyapp.com/)  
 - **백**: [https://ssafy-2024-back.fly.dev/](https://ssafy-2024-back.fly.dev/)
 
 ---
-# 로컬 실행 방법
 
+## 8. 로컬 실행 방법
 
-## 프론트엔드 서버 실행 방법
+### 프론트엔드 서버 실행 방법
 
 ```bash
 npm init -y
@@ -124,9 +122,17 @@ npm run build
 npm start
 ```
 
-## 백엔드 서버 실행 방법
+
+### 백엔드 서버 실행 방법
 
 ```bash
 pip install -r requirements.txt 
 python app.py
 ```
+
+## 9. 참여자 및 역할
+
+- **고대권**: PM(project Management) 및 AI 챗봇 기능 구현 (RAG/LLM)
+- **김근휘**: AI 챗봇 기능 구현(RAG/LLM) 및 테스트(RAGAS)
+- **이현희**: 프론트엔드 개발 (Node.js, JavaScript) 및 배포 (AWS)
+- **장인영**: 백엔드 개발 (FastAPI, Python) 및 배포 (Fly.io)
