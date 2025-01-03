@@ -61,10 +61,19 @@ async function clearAllData() {
   });
 }
 
+// Create a message bubble
 function createMessageBubble(content, sender = "user") {
   const wrapper = document.createElement("div");
   wrapper.classList.add("mb-6", "flex", "items-start", "space-x-3");
 
+
+  // 개별 정렬 방향 설정
+  if (sender === "user") {
+    wrapper.classList.add("flex-row-reverse", "space-x-reverse", "space-x-3"); // Q는 오른쪽 정렬 // 수정!!
+  }
+
+  // Avatar
+  // 공통 프로필 아이콘 디자인
   const avatar = document.createElement("div");
   avatar.classList.add(
     "w-10",
@@ -78,14 +87,17 @@ function createMessageBubble(content, sender = "user") {
     "text-white"
   );
 
-  if (sender === "user") {
-    avatar.classList.add("bg-gradient-to-br", "from-blue-500", "to-blue-700");
-    avatar.textContent = "U";
-  } else {
-    avatar.classList.add("bg-gray-200", "text-gray-900");
+  // 개별 프로필 아이콘 디자인
+  if (sender === "assistant") {
+    avatar.classList.add("bg-gradient-to-br", "from-indigo-300", "to-blue-600");
     avatar.textContent = "A";
+  } else {
+    avatar.classList.add("bg-gradient-to-br","from-customPink","to-customSky700");
+    avatar.textContent = "Q";
   }
 
+  // Bubble
+  // 공통 말풍선 디자인
   const bubble = document.createElement("div");
   bubble.classList.add(
     "max-w-full",
@@ -97,10 +109,11 @@ function createMessageBubble(content, sender = "user") {
     "shadow-sm"
   );
 
+  // 개별 말풍선 디자인
   if (sender === "user") {
-    bubble.classList.add("bg-blue-600", "text-white");
+    bubble.classList.add("bg-gradient-to-br","from-customSky500","to-customSky700","text-white");
   } else {
-    bubble.classList.add("bg-gray-200", "text-gray-900");
+    bubble.classList.add("bg-customSky100", "text-gray-600");
   }
 
   bubble.textContent = content;
@@ -110,6 +123,8 @@ function createMessageBubble(content, sender = "user") {
   return wrapper;
 }
 
+
+// Scroll to bottom
 function scrollToBottom() {
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
